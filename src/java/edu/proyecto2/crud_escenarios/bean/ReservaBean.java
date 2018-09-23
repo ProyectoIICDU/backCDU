@@ -64,6 +64,7 @@ public class ReservaBean {
         Usuario objUsuario= new Usuario(2,"josej","tricolor","Invitado","104614010913","Jose Julio","Tobar Cifuentes","Activo",new Date(2018-06-01),"Gustavo Ordoñez");
         objReserva.setIdReserva(null);
         objReserva.setIdUsuario(objUsuario);
+        Date fechaHoraReg = new Date();
         objReserva.setFechahorareg(new Date());
         objReserva.setFechahoramod(new Date());
         objReserva.setModificadopor("Administrador");

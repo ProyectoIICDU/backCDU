@@ -106,6 +106,7 @@ public class Usuario implements Serializable {
     private String activadopor;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<ReservaEspacio> reservaEspacioList;
+    private List<Usuario> usuarioList;
 
     public Usuario() {
     }
@@ -214,6 +215,14 @@ public class Usuario implements Serializable {
 
     public void setReservaEspacioList(List<ReservaEspacio> reservaEspacioList) {
         this.reservaEspacioList = reservaEspacioList;
+    }
+    
+    public List<Usuario> getUsuarioList() {
+        return usuarioList;
+    }
+
+    public void setUsuarioList(List<Usuario> usuarioList) {
+        this.usuarioList = usuarioList;
     }
 
     @Override

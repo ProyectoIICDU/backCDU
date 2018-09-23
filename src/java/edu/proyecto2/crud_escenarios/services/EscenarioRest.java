@@ -126,6 +126,41 @@ public class EscenarioRest {
         return deportebean.getDeportes();
        
     }
+    
+    //-------------------------------------------------------------------------------------------------------------------
+    //------------------------------Pruebas----------------------------------------
+    @GET
+    @Path("reservas")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<ReservaEspacio> findAllReservas(){
+        return reservabean.getAllReservas();//deportebean.getDeportes();
+       
+    }
+    
+    
+//    @GET
+//    @Path("Reserva/{id}")
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public String getReservaEspacio(@PathParam("id") int id){
+//        System.out.println("Metodo full");
+//        JSONArray reservasJson = new JSONArray();
+//         for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id)){  
+//            JSONObject objson=new JSONObject();
+//            objson.put("idReserva",obj.getIdReserva());
+//            objson.put("nombre", obj.getNombre());
+//            objson.put("fechaini",obj.getFechaini().getTime());
+//            objson.put("fechafin",obj.getFechafin().getTime());
+//            objson.put("tipo",obj.getTipo());
+//            objson.put("esfija",obj.getEsfija());
+//            objson.put("descripcion",obj.getDescripcion());
+//            objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+//        
+//            reservasJson.put(objson);
+//        }   
+//         return reservasJson.toString();
+//    }
+    
+    
 //-------------------------------------------------------------------------------------------------------------------------
 /*
     *Función encargada de recibir una peticion get, ádemas recibe un parametro en el path que es id 
@@ -285,19 +320,18 @@ public class EscenarioRest {
     @GET
     @Path("Reserva/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public String getReservaEspacio(@PathParam("id") int id){
+    public String getEspaciosReservados(@PathParam("id") int id){
         System.out.println("Metodo full");
         JSONArray reservasJson = new JSONArray();
-         for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id)){  
+         for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id))
+         {  
             JSONObject objson=new JSONObject();
-            objson.put("idReserva",obj.getIdReserva());
-            objson.put("nombre", obj.getNombre());
-            objson.put("fechaini",obj.getFechaini().getTime());
-            objson.put("fechafin",obj.getFechafin().getTime());
-            objson.put("tipo",obj.getTipo());
-            objson.put("esfija",obj.getEsfija());
-            objson.put("descripcion",obj.getDescripcion());
-            objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+            
+            objson.put("Usuario", obj.getIdUsuario().getNombres());
+            objson.put("Espacio Deportivo", obj.getNombre());
+            objson.put("Fecha", obj.getFechaini());
+            objson.put("Hora Inicio",obj.getFechaini().getTime());
+            objson.put("Hora Fin",obj.getFechafin().getTime());
         
             reservasJson.put(objson);
         }   
