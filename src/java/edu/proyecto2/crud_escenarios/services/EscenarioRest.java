@@ -26,6 +26,7 @@ import edu.proyecto2.crud_escenarios.util.ConverterJson;
 
 //-----------------------------------------------------------------------------------------------------
 import java.io.BufferedReader;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -353,9 +354,11 @@ public class EscenarioRest {
             
             objson.put("Usuario", obj.getIdUsuario().getNombres());
             objson.put("Espacio Deportivo", obj.getNombre());
-            objson.put("Fecha", obj.getFechaini());
-            objson.put("Hora Inicio",obj.getFechaini().getTime());
-            objson.put("Hora Fin",obj.getFechafin().getTime());
+            SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");            
+            objson.put("Fecha", fecha.format(obj.getFechaini()));
+            SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");  
+            objson.put("Hora Inicio",hora.format(obj.getFechaini()));
+            objson.put("Hora Fin",hora.format(obj.getFechafin()));
         
             reservasJson.put(objson);
         }   
