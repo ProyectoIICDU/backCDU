@@ -317,13 +317,37 @@ public class EscenarioRest {
     
     *Se convierte la lista de reservas en un array json para luego retornar
 */    
+    
     @GET
     @Path("Reserva/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public String getEspaciosReservados(@PathParam("id") int id){
+    public String getReservaEspacio(@PathParam("id") int id){
         System.out.println("Metodo full");
         JSONArray reservasJson = new JSONArray();
-         for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id))
+         for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id)){  
+            JSONObject objson=new JSONObject();
+            objson.put("idReserva",obj.getIdReserva());
+            objson.put("nombre", obj.getNombre());
+            objson.put("fechaini",obj.getFechaini().getTime());
+            objson.put("fechafin",obj.getFechafin().getTime());
+            objson.put("tipo",obj.getTipo());
+            objson.put("esfija",obj.getEsfija());
+            objson.put("descripcion",obj.getDescripcion());
+            objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+        
+            reservasJson.put(objson);
+        }   
+         return reservasJson.toString();
+    }
+    
+ //-------------------------------------------------Espacios reservados----------------------------------------------   
+    @GET
+    @Path("EspaciosReservados")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getEspaciosReservados(){
+        System.out.println("Metodo reservados");
+        JSONArray reservasJson = new JSONArray();
+         for(ReservaEspacio obj:this.reservabean.getAllReservas())
          {  
             JSONObject objson=new JSONObject();
             
