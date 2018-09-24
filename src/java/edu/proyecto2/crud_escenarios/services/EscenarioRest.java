@@ -342,6 +342,13 @@ public class EscenarioRest {
     }
     
  //-------------------------------------------------Espacios reservados----------------------------------------------   
+    /**
+     * Este método pretende obtener los espacios reservados hasta la fecha, más específico se mostrarán 
+     * los datos del espacio deportivo reservado, el usuario quien ha hecho la reserva, su fecha de reserva, 
+     * y por último la hora de inicio y fin de la reserva. 
+     * 
+     * @return devuelve el json con los datos anteriormente mendionados
+     */
     @GET
     @Path("EspaciosReservados")
     @Produces({MediaType.APPLICATION_JSON})
