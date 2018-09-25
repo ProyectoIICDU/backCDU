@@ -360,7 +360,7 @@ public class EscenarioRest {
             JSONObject objson=new JSONObject();
             
             objson.put("Usuario", obj.getIdUsuario().getNombres());
-            objson.put("Espacio Deportivo", obj.getNombre());
+            objson.put("Espacio Deportivo", obj.getIdEspacio().getNombre());
             SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");            
             objson.put("Fecha", fecha.format(obj.getFechaini()));
             SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");  
