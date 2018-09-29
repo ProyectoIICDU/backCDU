@@ -7,6 +7,8 @@ package edu.proyecto2.crud_escenarios.util;
 
 import edu.proyecto2.crud_escenarios.data.Deporte;
 import edu.proyecto2.crud_escenarios.data.EspacioDeportivo;
+import edu.proyecto2.crud_escenarios.data.ReservaEspacio;
+import edu.proyecto2.crud_escenarios.data.Usuario;
 import java.util.List;
 import org.primefaces.json.JSONArray;
 import org.primefaces.json.JSONObject;
@@ -61,5 +63,18 @@ public class ConverterJson {
             }
             objson.put("deporteList",deportesJson);
             return objson;
+    }
+    
+    public JSONObject convertirUsuario(Usuario objU)
+    {
+        JSONObject objson = new JSONObject();
+        JSONArray UsJson = new JSONArray();
+        for(Usuario objUsuario:objU.getUsuarioList()){
+            JSONObject objUsJson = new JSONObject();
+            objUsJson.put("usuario", objUsuario.getNombres());
+            UsJson.put(objUsJson);
+        }
+        objson.put("usuarioList", UsJson);;
+        return objson;        
     }
 }

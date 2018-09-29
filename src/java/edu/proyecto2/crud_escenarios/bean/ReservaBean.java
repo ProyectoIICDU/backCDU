@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.inject.Named;
 
 import javax.persistence.EntityManagerFactory;
@@ -36,13 +37,15 @@ import javax.faces.bean.ViewScoped;
 public class ReservaBean {
 
     
-    private EntityManagerFactory emf;//Es utilizado para hacer la conexion con la base de datos
+    private EntityManagerFactory emf;//Es utilizado para hacer la conexion con la base de datos    
+    
+    
     @PostConstruct
     public void init() {
-       
     }
+    
     public ReservaBean() {
-    }
+    }    
  
     
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -61,6 +64,7 @@ public class ReservaBean {
         Usuario objUsuario= new Usuario(2,"josej","tricolor","Invitado","104614010913","Jose Julio","Tobar Cifuentes","Activo",new Date(2018-06-01),"Gustavo Ordoñez");
         objReserva.setIdReserva(null);
         objReserva.setIdUsuario(objUsuario);
+        Date fechaHoraReg = new Date();
         objReserva.setFechahorareg(new Date());
         objReserva.setFechahoramod(new Date());
         objReserva.setModificadopor("Administrador");
@@ -90,6 +94,20 @@ public class ReservaBean {
                 reservaEspacio.add(reservas.get(i));
             }
            
+        }
+        return reservaEspacio;
+    }
+    
+    
+    public List<ReservaEspacio> getAllReservas()
+    {
+        emf = Persistence.createEntityManagerFactory("CRUD_EscenariosPU");
+        ReservaEspacioJpaController ctrl = new ReservaEspacioJpaController(emf);
+        List<ReservaEspacio> reservas = ctrl.findReservaEspacioEntities();
+        List<ReservaEspacio> reservaEspacio = new ArrayList<>();
+        for (int i = 0; i < reservas.size(); i++)
+        {
+            reservaEspacio.add(reservas.get(i));            
         }
         return reservaEspacio;
     }

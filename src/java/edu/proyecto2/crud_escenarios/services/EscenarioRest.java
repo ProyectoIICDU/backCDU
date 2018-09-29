@@ -26,6 +26,7 @@ import edu.proyecto2.crud_escenarios.util.ConverterJson;
 
 //-----------------------------------------------------------------------------------------------------
 import java.io.BufferedReader;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -126,6 +127,41 @@ public class EscenarioRest {
         return deportebean.getDeportes();
        
     }
+    
+    //-------------------------------------------------------------------------------------------------------------------
+    //------------------------------Pruebas----------------------------------------
+    @GET
+    @Path("reservas")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<ReservaEspacio> findAllReservas(){
+        return reservabean.getAllReservas();//deportebean.getDeportes();
+       
+    }
+    
+    
+//    @GET
+//    @Path("Reserva/{id}")
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public String getReservaEspacio(@PathParam("id") int id){
+//        System.out.println("Metodo full");
+//        JSONArray reservasJson = new JSONArray();
+//         for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id)){  
+//            JSONObject objson=new JSONObject();
+//            objson.put("idReserva",obj.getIdReserva());
+//            objson.put("nombre", obj.getNombre());
+//            objson.put("fechaini",obj.getFechaini().getTime());
+//            objson.put("fechafin",obj.getFechafin().getTime());
+//            objson.put("tipo",obj.getTipo());
+//            objson.put("esfija",obj.getEsfija());
+//            objson.put("descripcion",obj.getDescripcion());
+//            objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+//        
+//            reservasJson.put(objson);
+//        }   
+//         return reservasJson.toString();
+//    }
+    
+    
 //-------------------------------------------------------------------------------------------------------------------------
 /*
     *Función encargada de recibir una peticion get, ádemas recibe un parametro en el path que es id 
@@ -282,6 +318,7 @@ public class EscenarioRest {
     
     *Se convierte la lista de reservas en un array json para luego retornar
 */    
+    
     @GET
     @Path("Reserva/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -298,6 +335,37 @@ public class EscenarioRest {
             objson.put("esfija",obj.getEsfija());
             objson.put("descripcion",obj.getDescripcion());
             objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+        
+            reservasJson.put(objson);
+        }   
+         return reservasJson.toString();
+    }
+    
+ //-------------------------------------------------Espacios reservados----------------------------------------------   
+    /**
+     * Este método pretende obtener los espacios reservados hasta la fecha, más específico se mostrarán 
+     * los datos del espacio deportivo reservado, el usuario quien ha hecho la reserva, su fecha de reserva, 
+     * y por último la hora de inicio y fin de la reserva. 
+     * 
+     * @return devuelve el json con los datos anteriormente mendionados
+     */
+    @GET
+    @Path("EspaciosReservados")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getEspaciosReservados(){
+        System.out.println("Metodo reservados");
+        JSONArray reservasJson = new JSONArray();
+         for(ReservaEspacio obj:this.reservabean.getAllReservas())
+         {  
+            JSONObject objson=new JSONObject();
+            
+            objson.put("Usuario", obj.getIdUsuario().getNombres());
+            objson.put("EspacioDeportivo", obj.getIdEspacio().getNombre());
+            SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");            
+            objson.put("Fecha", fecha.format(obj.getFechaini()));
+            SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");  
+            objson.put("HoraInicio",hora.format(obj.getFechaini()));
+            objson.put("HoraFin",hora.format(obj.getFechafin()));
         
             reservasJson.put(objson);
         }   
