@@ -359,13 +359,13 @@ public class EscenarioRest {
          {  
             JSONObject objson=new JSONObject();
             
-            objson.put("Usuario", obj.getIdUsuario().getNombres());
-            objson.put("EspacioDeportivo", obj.getIdEspacio().getNombre());
+            objson.put("usuario", obj.getIdUsuario().getNombres());
+            objson.put("espacioDeportivo", obj.getIdEspacio().getNombre());
             SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");            
-            objson.put("Fecha", fecha.format(obj.getFechaini()));
+            objson.put("fecha", fecha.format(obj.getFechaini()));
             SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");  
-            objson.put("HoraInicio",hora.format(obj.getFechaini()));
-            objson.put("HoraFin",hora.format(obj.getFechafin()));
+            objson.put("horaInicio",hora.format(obj.getFechaini()));
+            objson.put("horaFin",hora.format(obj.getFechafin()));
         
             reservasJson.put(objson);
         }   
