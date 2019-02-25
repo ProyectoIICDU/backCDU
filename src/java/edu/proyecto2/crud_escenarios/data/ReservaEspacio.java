@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ReservaEspacio.findAll", query = "SELECT r FROM ReservaEspacio r")
     , @NamedQuery(name = "ReservaEspacio.findByIdReserva", query = "SELECT r FROM ReservaEspacio r WHERE r.idReserva = :idReserva")
     , @NamedQuery(name = "ReservaEspacio.findByNombre", query = "SELECT r FROM ReservaEspacio r WHERE r.nombre = :nombre")
+    , @NamedQuery(name = "ReservaEspacio.findByPrograma", query = "SELECT r FROM ReservaEspacio r WHERE r.programa = :programa")
     , @NamedQuery(name = "ReservaEspacio.findByFechaini", query = "SELECT r FROM ReservaEspacio r WHERE r.fechaini = :fechaini")
     , @NamedQuery(name = "ReservaEspacio.findByFechafin", query = "SELECT r FROM ReservaEspacio r WHERE r.fechafin = :fechafin")
     , @NamedQuery(name = "ReservaEspacio.findByTipo", query = "SELECT r FROM ReservaEspacio r WHERE r.tipo = :tipo")
@@ -65,6 +66,10 @@ public class ReservaEspacio implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "nombre")
     private String nombre;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "programa")
+    private String programa;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechaini")
@@ -125,9 +130,10 @@ public class ReservaEspacio implements Serializable {
         this.idReserva = idReserva;
     }
 
-    public ReservaEspacio(Integer idReserva, String nombre, Date fechaini, Date fechafin, String tipo, boolean esfija, String descripcion, String registradopor, String modificadopor, Date fechahorareg, Date fechahoramod) {
+    public ReservaEspacio(Integer idReserva, String nombre,String programa, Date fechaini, Date fechafin, String tipo, boolean esfija, String descripcion, String registradopor, String modificadopor, Date fechahorareg, Date fechahoramod) {
         this.idReserva = idReserva;
         this.nombre = nombre;
+        this.programa = programa;
         this.fechaini = fechaini;
         this.fechafin = fechafin;
         this.tipo = tipo;
@@ -155,6 +161,14 @@ public class ReservaEspacio implements Serializable {
         this.nombre = nombre;
     }
 
+    public String getPrograma() {
+        return programa;
+    }
+
+    public void setPrograma(String pPrograma) {
+        this.programa = pPrograma;
+    }
+    
     public Date getFechaini() {
         return fechaini;
     }

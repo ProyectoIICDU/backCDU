@@ -67,6 +67,7 @@ public class ReservaBean {
         Date fechaHoraReg = new Date();
         objReserva.setFechahorareg(new Date());
         objReserva.setFechahoramod(new Date());
+        //objReserva.setPrograma("Por defecto 2");
         objReserva.setModificadopor("Administrador");
         objReserva.setRegistradopor("Administrador");
         emf=Persistence.createEntityManagerFactory("CRUD_EscenariosPU");
