@@ -27,6 +27,7 @@ import edu.proyecto2.crud_escenarios.util.ConverterJson;
 //-----------------------------------------------------------------------------------------------------
 import java.io.BufferedReader;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -139,29 +140,6 @@ public class EscenarioRest {
     }
     
     
-//    @GET
-//    @Path("Reserva/{id}")
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String getReservaEspacio(@PathParam("id") int id){
-//        System.out.println("Metodo full");
-//        JSONArray reservasJson = new JSONArray();
-//         for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id)){  
-//            JSONObject objson=new JSONObject();
-//            objson.put("idReserva",obj.getIdReserva());
-//            objson.put("nombre", obj.getNombre());
-//            objson.put("fechaini",obj.getFechaini().getTime());
-//            objson.put("fechafin",obj.getFechafin().getTime());
-//            objson.put("tipo",obj.getTipo());
-//            objson.put("esfija",obj.getEsfija());
-//            objson.put("descripcion",obj.getDescripcion());
-//            objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
-//        
-//            reservasJson.put(objson);
-//        }   
-//         return reservasJson.toString();
-//    }
-    
-    
 //-------------------------------------------------------------------------------------------------------------------------
 /*
     *Función encargada de recibir una peticion get, ádemas recibe un parametro en el path que es id 
@@ -241,13 +219,8 @@ public class EscenarioRest {
         System.out.println("-- " + reservaJson);
         final Gson gson = new Gson();
         final ReservaEspacio reservaObj = gson.fromJson(reservaJson, ReservaEspacio.class);
-        
-        
-        
-        System.out.println(": " + reservaObj.getNombre());
-        System.out.println(": " + reservaObj.getFechaini());
-        
-        this.reservabean.guardarReserva(reservaObj);
+        Usuario usuario= this.usuariobean.getUsuario(reservaObj.getNombre());
+        this.reservabean.guardarReserva(reservaObj, usuario);
         return reservaJson;
     }
 //---------------------------------------------------------------------------------------------------------------------------
@@ -320,27 +293,65 @@ public class EscenarioRest {
 */    
     
     @GET
-    @Path("Reserva/{id}")
+    @Path("Reserva/{id},{usu}")
     @Produces({MediaType.APPLICATION_JSON})
-    public String getReservaEspacio(@PathParam("id") int id){
-        System.out.println("Metodo full");
-        JSONArray reservasJson = new JSONArray();
-         for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id)){  
-            JSONObject objson=new JSONObject();
-            objson.put("idReserva",obj.getIdReserva());
-            objson.put("nombre", obj.getNombre());
-            objson.put("fechaini",obj.getFechaini().getTime());
-            objson.put("fechafin",obj.getFechafin().getTime());
-            objson.put("tipo",obj.getTipo());
-            objson.put("esfija",obj.getEsfija());
-            objson.put("descripcion",obj.getDescripcion());
-            objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+    public String getReservaEspacio(@PathParam("id") int id,@PathParam("usu") String usu){
         
-            reservasJson.put(objson);
-        }   
-         return reservasJson.toString();
+        JSONArray reservasJson = new JSONArray();
+        Date fechaActual = new Date();
+        if(this.usuariobean.identificarUsuario(usu)){
+            for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id)){ 
+                if(obj.getFechafin().compareTo(fechaActual)>0){
+                
+                    JSONObject objson=new JSONObject();
+                    objson.put("idReserva",obj.getIdReserva());
+                    objson.put("nombre", obj.getNombre());
+                    objson.put("fechaini",obj.getFechaini().getTime());
+                    objson.put("fechafin",obj.getFechafin().getTime());
+                    objson.put("tipo",obj.getTipo());
+                    objson.put("esfija",obj.getEsfija());
+                    objson.put("descripcion",obj.getDescripcion());
+                    objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+                    reservasJson.put(objson);
+                }
+                
+            }
+        }else{
+            for(ReservaEspacio obj:this.reservabean.getReservaEspacio(id)){  
+                JSONObject objson=new JSONObject();
+                if(obj.getFechafin().compareTo(fechaActual)>0){
+                    if(obj.getNombre().equals(usu)){
+                        objson.put("idReserva",obj.getIdReserva());
+                        objson.put("nombre", obj.getNombre());
+                        objson.put("fechaini",obj.getFechaini().getTime());
+                        objson.put("fechafin",obj.getFechafin().getTime());
+                        objson.put("tipo",obj.getTipo());
+                        objson.put("esfija",obj.getEsfija());
+                        objson.put("descripcion",obj.getDescripcion());
+                        objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+                    }else{
+                        objson.put("idReserva",obj.getIdReserva());
+                        objson.put("nombre", "Reservado");
+                        objson.put("fechaini",obj.getFechaini().getTime());
+                        objson.put("fechafin",obj.getFechafin().getTime());
+                        objson.put("tipo",obj.getTipo());
+                        objson.put("esfija",obj.getEsfija());
+                        objson.put("descripcion","No Disponible para el Usuario");
+                        objson.put("idEspacio",this.converteJson.convertirEspacio(obj.getIdEspacio()) );
+                    }
+                    reservasJson.put(objson);
+
+                }
+                
+            }
+        }
+           
+        return reservasJson.toString();
     }
     
+   
+   
+
  //-------------------------------------------------Espacios reservados----------------------------------------------   
     /**
      * Este método pretende obtener los espacios reservados hasta la fecha, más específico se mostrarán 
@@ -350,25 +361,56 @@ public class EscenarioRest {
      * @return devuelve el json con los datos anteriormente mendionados
      */
     @GET
-    @Path("EspaciosReservados")
+    @Path("EspaciosReservados/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public String getEspaciosReservados(){
-        System.out.println("Metodo reservados");
+    public String getEspaciosReservados(@PathParam("id") String id){
+        //MIRAR SI TOCA CAMBIAR EL CAMPO
+        Date fechaActual = new Date();
+        System.out.println("Fecha Actual "+ fechaActual);
         JSONArray reservasJson = new JSONArray();
-         for(ReservaEspacio obj:this.reservabean.getAllReservas())
-         {  
-            JSONObject objson=new JSONObject();
+        if(!this.usuariobean.identificarUsuario(id)){
+            for(ReservaEspacio obj:this.reservabean.getAllReservas())
+            {  
+                
+                if(obj.getFechafin().compareTo(fechaActual)>0){
+                    if(obj.getNombre().equals(id)){
+                        JSONObject objson=new JSONObject();
+                        objson.put("usuario", obj.getIdUsuario().getNombres());
+                        objson.put("espacioDeportivo", obj.getIdEspacio().getNombre());
+                        SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");            
+                        objson.put("fecha", fecha.format(obj.getFechaini()));
+                        SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");  
+                        objson.put("horaInicio",hora.format(obj.getFechaini()));
+                        objson.put("horaFin",hora.format(obj.getFechafin()));
+
+                        reservasJson.put(objson);
+
+                    }
+                }
+                
+            }
+        }else
+        {
+            for(ReservaEspacio obj:this.reservabean.getAllReservas())
+            {  
+                System.out.println("Fecha Actual "+ obj.getFechafin());
+                if(obj.getFechafin().compareTo(fechaActual)>0){
+                        JSONObject objson=new JSONObject();
+                    objson.put("usuario", obj.getIdUsuario().getNombres());
+                    objson.put("espacioDeportivo", obj.getIdEspacio().getNombre());
+                    SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");            
+                    objson.put("fecha", fecha.format(obj.getFechaini()));
+                    SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");  
+                    objson.put("horaInicio",hora.format(obj.getFechaini()));
+                    objson.put("horaFin",hora.format(obj.getFechafin()));
+                    reservasJson.put(objson);
+                }
+                
+
+
+            }
+        }
             
-            objson.put("usuario", obj.getIdUsuario().getNombres());
-            objson.put("espacioDeportivo", obj.getIdEspacio().getNombre());
-            SimpleDateFormat fecha = new SimpleDateFormat("dd/MM/yyyy");            
-            objson.put("fecha", fecha.format(obj.getFechaini()));
-            SimpleDateFormat hora = new SimpleDateFormat("HH:mm:ss");  
-            objson.put("horaInicio",hora.format(obj.getFechaini()));
-            objson.put("horaFin",hora.format(obj.getFechafin()));
-        
-            reservasJson.put(objson);
-        }   
          return reservasJson.toString();
     }
 
@@ -390,7 +432,7 @@ public class EscenarioRest {
     public String getUsuariosNoValidos(){
           final Gson gson = new Gson();
           String nuevo=gson.toJson(this.usuariobean.getUsuariosNoValidos());
-          System.out.println(nuevo);
+          System.out.println("este es el nuevo");
           return nuevo;
     }
 

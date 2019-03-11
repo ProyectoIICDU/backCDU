@@ -33,7 +33,7 @@ import javax.persistence.Persistence;
 @ViewScoped
 public class UsuarioBean {
 
-   
+   private List<Usuario> list=new ArrayList();
     private String cambio; 
     private EntityManagerFactory emf;//Es utilizado para hacer la conexion con la base de datos
     @PostConstruct
@@ -92,6 +92,45 @@ public class UsuarioBean {
         
       
     }
-
     
+    public boolean identificarUsuario(String nombre) {
+        emf=Persistence.createEntityManagerFactory("CRUD_EscenariosPU");
+        UsuarioJpaController ctrl= new UsuarioJpaController(emf);
+        list = ctrl.findUsuarioEntities();
+        boolean resultado=false;
+        System.out.println(list.size());
+        for(int i=0;i<list.size();i++){
+            System.out.println(list.get(i).getRol());
+            System.out.println(list.get(i).getLogin());
+            if(list.get(i).getLogin().equals(nombre)){
+                
+                if(list.get(i).getRol().equals("Administrador")){
+                    resultado=true;
+                }
+                
+            }
+           
+        }
+        return resultado;
+    }
+
+    public Usuario getUsuario(String nombre) {
+        Usuario usuario=null;
+        emf=Persistence.createEntityManagerFactory("CRUD_EscenariosPU");
+        UsuarioJpaController ctrl= new UsuarioJpaController(emf);
+        list = ctrl.findUsuarioEntities();
+        boolean resultado=false;
+        System.out.println(list.size());
+        for(int i=0;i<list.size();i++){
+            
+            if(list.get(i).getLogin().equals(nombre)){
+               usuario=list.get(i);
+            }
+           
+        }
+        
+        return usuario;
+    }
+
+     
 }

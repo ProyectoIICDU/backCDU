@@ -181,7 +181,7 @@ public class EscenarioRestTest {
         int id = 0;
         EscenarioRest instance = new EscenarioRest();
         String expResult = "";
-        String result = instance.getReservaEspacio(id);
+        String result = instance.getReservaEspacio(id,"admin");
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
@@ -195,7 +195,7 @@ public class EscenarioRestTest {
         System.out.println("getEspaciosReservados");
         EscenarioRest instance = new EscenarioRest();
         String expResult = "";
-        String result = instance.getEspaciosReservados();
+        String result = instance.getEspaciosReservados("");
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

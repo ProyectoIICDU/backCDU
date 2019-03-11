@@ -59,11 +59,15 @@ public class ReservaBean {
     
     *Se llama al metodo create para guardar el objeto.
 */    
-    public void guardarReserva(ReservaEspacio objReserva){
-        System.out.println("Reserva"+objReserva.getFechafin());
-        Usuario objUsuario= new Usuario(2,"josej","tricolor","Invitado","104614010913","Jose Julio","Tobar Cifuentes","Activo",new Date(2018-06-01),"Gustavo Ordoñez");
+    public void guardarReserva(ReservaEspacio objReserva, Usuario usuario){
+        System.out.println("Reserva"+usuario);
+        if(usuario==null){
+            
+            Usuario objUsuario= new Usuario(666,objReserva.getNombre(),"1061772353","Invitado","104614010913",objReserva.getNombre(),"Mellizo","Activo",new Date(),"Pepe Perez");
+
+            objReserva.setIdUsuario(objUsuario);
+        }else{objReserva.setIdUsuario(usuario);}
         objReserva.setIdReserva(null);
-        objReserva.setIdUsuario(objUsuario);
         Date fechaHoraReg = new Date();
         objReserva.setFechahorareg(new Date());
         objReserva.setFechahoramod(new Date());

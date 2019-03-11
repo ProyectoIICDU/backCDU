@@ -48,20 +48,20 @@ public class ReservaEspacioJpaController implements Serializable {
                 idEspacio = em.getReference(idEspacio.getClass(), idEspacio.getIdEspacio());
                 reservaEspacio.setIdEspacio(idEspacio);
             }
-            Usuario idUsuario = reservaEspacio.getIdUsuario();
+            /*Usuario idUsuario = reservaEspacio.getIdUsuario();
             if (idUsuario != null) {
                 idUsuario = em.getReference(idUsuario.getClass(), idUsuario.getIdUsuario());
                 reservaEspacio.setIdUsuario(idUsuario);
-            }
+            }*/
             em.persist(reservaEspacio);
             if (idEspacio != null) {
                 idEspacio.getReservaEspacioList().add(reservaEspacio);
                 idEspacio = em.merge(idEspacio);
             }
-            if (idUsuario != null) {
+            /*if (idUsuario != null) {
                 idUsuario.getReservaEspacioList().add(reservaEspacio);
                 idUsuario = em.merge(idUsuario);
-            }
+            }*/
             em.getTransaction().commit();
         } finally {
             if (em != null) {
