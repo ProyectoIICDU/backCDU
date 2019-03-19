@@ -462,5 +462,29 @@ public class EscenarioRest {
 
 //---------------------------------------------------------------------------------------------------------------------------    
     
+//---------------------------------------------------------------------------------------------
+/*
+    *Esta funcion se encarga de verificar un usuario administrador dado su nombre de usuario
+    
+    *Función encargada de recibir una peticion get que recibe un parametro string que es el nombre de usuario
+    
+    *Se llama a la funcion identificarUsuario(String nombre) del objeto usuariobean que recibe el nombre de usuario
+    y retorna true o false dependiendo de si es administrador o no.
+*/    
+    @GET
+    @Path("ValidarAdmin/{nombreUsuario}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String validarAdmin(@PathParam("nombreUsuario") String nombreUsuario){
+        System.out.println("Solicitud al metodo de validar administrador");
+        System.out.println("Nombre del usuario a validar -> " + nombreUsuario);
+        if(this.usuariobean.identificarUsuario(nombreUsuario)) {
+            return "true";
+        }
+        else {
+            return "false";
+        }
+    }
+
+//------------------------------------------------------------------------------------------------     
     
 }

@@ -21,7 +21,7 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author jose
+ * @author proyecto II - 2018.2
  */
 /*
     Esta clase contiene todo lo relacionado con los usuarios es el intermediario entre
@@ -93,15 +93,22 @@ public class UsuarioBean {
       
     }
     
+//---------------------------------------------------------------------------------------------
+/*
+    *Esta funcion se encarga de identificar un usuario administrador dado su nombre de usuario
+    
+    *La función recibe un parametro string que es el nombre de usuario
+    
+    *Retorna true o false dependiendo de si es administrador o no.
+*/  
     public boolean identificarUsuario(String nombre) {
         emf=Persistence.createEntityManagerFactory("CRUD_EscenariosPU");
         UsuarioJpaController ctrl= new UsuarioJpaController(emf);
         list = ctrl.findUsuarioEntities();
         boolean resultado=false;
-        System.out.println(list.size());
+        System.out.println("Hallados " + list.size() + " usuarios.");
         for(int i=0;i<list.size();i++){
-            System.out.println(list.get(i).getRol());
-            System.out.println(list.get(i).getLogin());
+            System.out.println("-> " + list.get(i).getRol() + " - " + list.get(i).getLogin());
             if(list.get(i).getLogin().equals(nombre)){
                 
                 if(list.get(i).getRol().equals("Administrador")){
@@ -132,5 +139,5 @@ public class UsuarioBean {
         return usuario;
     }
 
-     
+    
 }
