@@ -5,6 +5,7 @@
  */
 package edu.proyecto2.crud_escenarios.jpa;
 
+import edu.proyecto2.crud_escenarios.bean.ReservaBean;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -90,13 +91,31 @@ public class EspacioDeportivoJpaController implements Serializable {
         EntityManager em = null;
         try {
             em = getEntityManager();
+            ReservaBean reserva= new ReservaBean();
             em.getTransaction().begin();
             EspacioDeportivo persistentEspacioDeportivo = em.find(EspacioDeportivo.class, espacioDeportivo.getIdEspacio());
             List<Deporte> deporteListOld = persistentEspacioDeportivo.getDeporteList();
+            System.out.println("escenario "+persistentEspacioDeportivo.getNombre());
+            if(espacioDeportivo.getEstado().equals("Desactivado"))
+            {
+                System.out.println("Entro");
+                 List<ReservaEspacio> listaReservas= persistentEspacioDeportivo.getReservaEspacioList();
+                int id;
+                for(int i=0;i<listaReservas.size();i++)
+                {
+                 
+                      id= listaReservas.get(i).getIdReserva();
+                      System.out.println("id reserva "+id);
+                      reserva.deleteReserva(id);
+                }
+              
+            }
             List<Deporte> deporteListNew = espacioDeportivo.getDeporteList();
+            
             List<ReservaEspacio> reservaEspacioListOld = persistentEspacioDeportivo.getReservaEspacioList();
+           
             List<ReservaEspacio> reservaEspacioListNew = espacioDeportivo.getReservaEspacioList();
-            List<String> illegalOrphanMessages = null;
+            /* List<String> illegalOrphanMessages = null;
             for (ReservaEspacio reservaEspacioListOldReservaEspacio : reservaEspacioListOld) {
                 if (!reservaEspacioListNew.contains(reservaEspacioListOldReservaEspacio)) {
                     if (illegalOrphanMessages == null) {
@@ -107,7 +126,7 @@ public class EspacioDeportivoJpaController implements Serializable {
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
-            }
+            }*/
             List<Deporte> attachedDeporteListNew = new ArrayList<Deporte>();
             for (Deporte deporteListNewDeporteToAttach : deporteListNew) {
                 deporteListNewDeporteToAttach = em.getReference(deporteListNewDeporteToAttach.getClass(), deporteListNewDeporteToAttach.getIdDeporte());
