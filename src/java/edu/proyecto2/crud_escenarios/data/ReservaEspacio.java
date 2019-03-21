@@ -120,8 +120,8 @@ public class ReservaEspacio implements Serializable {
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     @ManyToOne(optional = false)
     private Usuario idUsuario;
-    @ManyToMany
-    private List<Usuario> usuarioList;
+    //@ManyToMany
+    //private List<Usuario> usuarioList;
 
     public ReservaEspacio() {
     }
@@ -257,13 +257,13 @@ public class ReservaEspacio implements Serializable {
         this.idUsuario = idUsuario;
     }
     
-    public List<Usuario> getUsuarioList() {
+    /*public List<Usuario> getUsuarioList() {
         return usuarioList;
     }
 
     public void setUsuarioList(List<Usuario> usuarioList) {
         this.usuarioList = usuarioList;
-    }
+    }*/
     
     
 

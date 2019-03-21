@@ -486,5 +486,20 @@ public class EscenarioRest {
     }
 
 //------------------------------------------------------------------------------------------------     
-    
+  
+  /**Esta función se encarga de identificar si un usuario es administrador o no, recibe el usuario desde
+  * Front y ya luego con el método de identificarUsuario se manda el nombre y este nos devuelve un 
+  * boolean comfirmando con true si lo es o con false en caso contrario   
+   */
+    @GET
+    @Path("IdentificarUsuarios/{usu}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String identificarRolUs(@PathParam("usu") String usu){
+        System.out.println("Entro a identificar usuario "+ usu);
+        boolean esAdmin = false;
+        esAdmin = this.usuariobean.identificarUsuario(usu);
+        System.out.println("valor de identificar usu "+esAdmin);
+        if(esAdmin) return "true";
+        else return "false";        
+    }  
 }
