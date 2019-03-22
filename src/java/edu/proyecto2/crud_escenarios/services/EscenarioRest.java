@@ -153,28 +153,31 @@ public class EscenarioRest {
     @Path("EspacioDeporte/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public String findAllEscenariosDeportes(@PathParam("id") int id){
-        
-        JSONArray espaciosJson = new JSONArray();
+          JSONArray espaciosJson = new JSONArray();
         for(EspacioDeportivo obj:this.escenariobean.getEspaciosDeportes(id)){  
-            JSONObject objson=new JSONObject();
-            objson.put("idEspacio",obj.getIdEspacio());
-            objson.put("nombre", obj.getNombre());
-            objson.put("ubicacion",obj.getUbicacion());
-            objson.put("estado",obj.getEstado());
-            objson.put("descripcion",obj.getDescripcion());
-            objson.put("foto",obj.getFoto());
-            objson.put("tipofoto",obj.getTipofoto());
-            JSONArray deportesJson = new JSONArray();
-            for(Deporte objDeporte:obj.getDeporteList()){
-                JSONObject objDepJson=new JSONObject();
-                objDepJson.put("idDeporte",objDeporte.getIdDeporte());
-                objDepJson.put("nombre", objDeporte.getNombre());
-                deportesJson.put(objDepJson);
+            if( obj.getEstado().equals("En Servicio") ){
+                JSONObject objson=new JSONObject();
+                objson.put("idEspacio",obj.getIdEspacio());
+                objson.put("nombre", obj.getNombre());
+                objson.put("ubicacion",obj.getUbicacion());
+                objson.put("estado",obj.getEstado());
+                objson.put("descripcion",obj.getDescripcion());
+                objson.put("foto",obj.getFoto());
+                objson.put("tipofoto",obj.getTipofoto());
+                JSONArray deportesJson = new JSONArray();
+                for(Deporte objDeporte:obj.getDeporteList()){
+                    JSONObject objDepJson=new JSONObject();
+                    objDepJson.put("idDeporte",objDeporte.getIdDeporte());
+                    objDepJson.put("nombre", objDeporte.getNombre());
+                    deportesJson.put(objDepJson);
+                }
+                objson.put("deporteList",deportesJson);
+                espaciosJson.put(objson);
             }
-            objson.put("deporteList",deportesJson);
-            espaciosJson.put(objson);
+            
         }   
         return espaciosJson.toString();   
+
     }
     
 //----------------------------------------------------------------------------------------------------------------------------------
