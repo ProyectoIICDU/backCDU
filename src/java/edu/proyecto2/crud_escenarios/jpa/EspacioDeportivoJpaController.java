@@ -5,7 +5,9 @@
  */
 package edu.proyecto2.crud_escenarios.jpa;
 
+import edu.proyecto2.crud_escenarios.bean.CorreoBean;
 import edu.proyecto2.crud_escenarios.bean.ReservaBean;
+import edu.proyecto2.crud_escenarios.data.Correo;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -93,21 +95,30 @@ public class EspacioDeportivoJpaController implements Serializable {
             em = getEntityManager();
             ReservaBean reserva= new ReservaBean();
             em.getTransaction().begin();
+            Correo objCorreo= new Correo();
+            CorreoBean objEnviar= new CorreoBean();
             EspacioDeportivo persistentEspacioDeportivo = em.find(EspacioDeportivo.class, espacioDeportivo.getIdEspacio());
             List<Deporte> deporteListOld = persistentEspacioDeportivo.getDeporteList();
             System.out.println("escenario "+persistentEspacioDeportivo.getNombre());
             if(espacioDeportivo.getEstado().equals("Desactivado"))
-            {
-                System.out.println("Entro");
+            {   
+                objCorreo.setAsunto("Cancelación de reserva");
+                objCorreo.setCuerpo("Se ha cancelado su reserva por motivos confidenciales de la administración");
+                 System.out.println("Entro");
                  List<ReservaEspacio> listaReservas= persistentEspacioDeportivo.getReservaEspacioList();
                 int id;
+                 List<String> nombre= new ArrayList<String>();
                 for(int i=0;i<listaReservas.size();i++)
                 {
-                 
+                         
+                    
                       id= listaReservas.get(i).getIdReserva();
+                      nombre.add(listaReservas.get(i).getNombre()+"@unicauca.edu.co");
                       System.out.println("id reserva "+id);
                       reserva.deleteReserva(id);
                 }
+                objCorreo.setDestinatarios(nombre);
+                objEnviar.enviarCorreo(objCorreo);
               
             }
             List<Deporte> deporteListNew = espacioDeportivo.getDeporteList();
@@ -115,18 +126,7 @@ public class EspacioDeportivoJpaController implements Serializable {
             List<ReservaEspacio> reservaEspacioListOld = persistentEspacioDeportivo.getReservaEspacioList();
            
             List<ReservaEspacio> reservaEspacioListNew = espacioDeportivo.getReservaEspacioList();
-            /* List<String> illegalOrphanMessages = null;
-            for (ReservaEspacio reservaEspacioListOldReservaEspacio : reservaEspacioListOld) {
-                if (!reservaEspacioListNew.contains(reservaEspacioListOldReservaEspacio)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain ReservaEspacio " + reservaEspacioListOldReservaEspacio + " since its idEspacio field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }*/
+       
             List<Deporte> attachedDeporteListNew = new ArrayList<Deporte>();
             for (Deporte deporteListNewDeporteToAttach : deporteListNew) {
                 deporteListNewDeporteToAttach = em.getReference(deporteListNewDeporteToAttach.getClass(), deporteListNewDeporteToAttach.getIdDeporte());
